@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Summarizer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 400px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 10px 0;
+        }
+
+        nav ul li {
+            display: inline;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        nav ul li a.active {
+            color: #fff;
+            background: #6c63ff;
+        }
+
+        .upload-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 2px dashed #6c63ff;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        button {
+            background: #6c63ff;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        button:hover {
+            background: #4a46d1;
+        }
+
+        #summaryBox {
+            margin-top: 15px;
+            padding: 10px;
+            background: #f3f3f3;
+            border-radius: 5px;
+            display: none;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>📄 PDF Summarizer</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#" class="active">Home</a></li>
+            <li><a href="#">Download</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="upload-section" onclick="document.getElementById('fileInput').click()">
+            <p>Drag and drop your PDF files here</p>
+            <button id="uploadBtn">Upload PDF</button>
+            <input type="file" id="fileInput" accept=".pdf">
+        </div>
+
+        <button id="summarizeBtn">Summarize</button>
+        <button id="downloadBtn">Download Summary</button>
+
+        <div id="summaryBox">
+            <strong>Summary:</strong>
+            <p id="summaryText">Your summarized text will appear here...</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("uploadBtn").addEventListener("click", function () {
+            document.getElementById("fileInput").click();
+        });
+
+        document.getElementById("fileInput").addEventListener("change", function () {
+            alert("PDF Uploaded: " + this.files[0].name);
+        });
+
+        document.getElementById("summarizeBtn").addEventListener("click", function () {
+            document.getElementById("summaryBox").style.display = "block";
+            document.getElementById("summaryText").innerText = "This is a sample summary of the uploaded PDF.";
+        });
+
+        document.getElementById("downloadBtn").addEventListener("click", function () {
+            const summaryText = document.getElementById("summaryText").innerText;
+            const blob = new Blob([summaryText], { type: "text/plain" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "summary.txt";
+            link.click();
+        });
+    </script>
+
+</body>
+</html>

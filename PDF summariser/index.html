@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PDF Summarizer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f9fa;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 400px;
+      position: relative;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    nav ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 10px 0;
+    }
+
+    nav ul li {
+      display: inline;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
+
+    nav ul li a.active {
+      color: #fff;
+      background: #6c63ff;
+    }
+
+    .upload-section {
+      margin: 20px 0;
+      padding: 15px;
+      border: 2px dashed #6c63ff;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    button {
+      background: #6c63ff;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 5px;
+    }
+
+    button:hover {
+      background: #4a46d1;
+    }
+
+    #summaryBox {
+      margin-top: 15px;
+      padding: 10px;
+      background: #f3f3f3;
+      border-radius: 5px;
+      display: none;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    /* Loader Styles */
+    #loader {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.8);
+      z-index: 10;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .spinner {
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid #6c63ff;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    #fileNameDisplay {
+      margin-top: 10px;
+      color: green;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>📄 PDF Summarizer</h1>
+  </header>
+
+  <nav>
+    <ul>
+      <li><a href="#" class="active">Home</a></li>
+      <li><a href="#">Download</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <div id="loader">
+      <div class="spinner"></div>
+      <p>Processing...</p>
+    </div>
+
+    <div class="upload-section" onclick="document.getElementById('fileInput').click()">
+      <p>Drag and drop your PDF files here</p>
+      <button id="uploadBtn">Upload PDF</button>
+      <input type="file" id="fileInput" accept=".pdf" />
+    </div>
+    <p id="fileNameDisplay"></p>
+
+    <button id="summarizeBtn">Summarize</button>
+    <button id="downloadBtn">Download Summary</button>
+
+    <div id="summaryBox">
+      <strong>Summary:</strong>
+      <p id="summaryText">Your summarized text will appear here...</p>
+    </div>
+  </div>
+
+  <script>
+    const fileInput = document.getElementById("fileInput");
+    const fileNameDisplay = document.getElementById("fileNameDisplay");
+    const uploadBtn = document.getElementById("uploadBtn");
+    let uploadedFile;
+
+    uploadBtn.addEventListener("click", function () {
+      fileInput.click();
+    });
+
+    fileInput.addEventListener("change", function () {
+      if (fileInput.files.length > 0) {
+        uploadedFile = fileInput.files[0];
+        fileNameDisplay.innerText = "✅ File ready: " + uploadedFile.name;
+        uploadBtn.innerText = "Change File";
+      }
+    });
+
+    document.getElementById("summarizeBtn").addEventListener("click", async function () {
+      if (!uploadedFile) {
+        alert("Please upload a PDF file first.");
+        return;
+      }
+
+      document.getElementById("loader").style.display = "flex";
+      document.getElementById("summaryBox").style.display = "none";
+
+      const formData = new FormData();
+      formData.append("file", uploadedFile);
+
+      try {
+        const response = await fetch("/upload-pdf/", {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+          document.getElementById("summaryText").innerText = data.Summary;
+          document.getElementById("summaryBox").style.display = "block";
+        } else {
+          alert("Error: " + data.error);
+        }
+      } catch (error) {
+        alert("Error: " + error.message);
+      } finally {
+        document.getElementById("loader").style.display = "none";
+      }
+    });
+
+    document.getElementById("downloadBtn").addEventListener("click", function () {
+      const summaryText = document.getElementById("summaryText").innerText;
+      const blob = new Blob([summaryText], { type: "text/plain" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "summary.txt";
+      link.click();
+    });
+  </script>
+</body>
+</html>
