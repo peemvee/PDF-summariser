@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF Summarizer</title>
+  <!-- Replit-themed Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="custom.css">
+</head>
+<body>
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card shadow-sm">
+          <div class="card-header bg-transparent">
+            <h1 class="text-center mb-0">PDF Summarizer</h1>
+          </div>
+          <div class="card-body">
+            <div class="upload-container mb-4">
+              <div class="mb-3">
+                <label for="pdfFile" class="form-label">Select a PDF file to summarize</label>
+                <div class="input-group">
+                  <input type="file" class="form-control" id="pdfFile" accept=".pdf" required>
+                </div>
+                <div id="fileInfo" class="form-text mt-2 d-none">
+                  Selected file: <span id="fileName" class="fw-bold"></span>
+                </div>
+              </div>
+              
+              <div class="d-grid gap-2">
+                <button id="uploadBtn" class="btn btn-secondary" disabled>
+                  <i class="fas fa-upload me-2"></i>Upload and Summarize
+                </button>
+              </div>
+            </div>
+            
+            <!-- Loading indicator -->
+            <div id="loadingContainer" class="text-center py-4 d-none">
+              <div class="spinner-border text-primary mb-3" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <p class="mb-0" id="loadingMessage">Processing your PDF. This may take a few minutes...</p>
+              <p class="text-muted small mt-2">Wait time: <span id="waitTime">0</span> seconds</p>
+            </div>
+            
+            <!-- Error display -->
+            <div id="errorContainer" class="alert alert-danger d-none" role="alert">
+              <h4 class="alert-heading"><i class="fas fa-exclamation-triangle me-2"></i>Error</h4>
+              <p id="errorMessage">An unexpected error occurred.</p>
+              <hr>
+              <div class="d-grid">
+                <button id="retryBtn" class="btn btn-outline-light">
+                  <i class="fas fa-sync-alt me-2"></i>Retry
+                </button>
+              </div>
+            </div>
+            
+            <!-- Results display -->
+            <div id="resultsContainer" class="d-none">
+              <h3 class="mb-3">Summary</h3>
+              <div class="summary-box p-3 border rounded">
+                <div id="summaryContent" class="text-break"></div>
+              </div>
+              <div class="d-grid gap-2 mt-4">
+                <button id="newSummaryBtn" class="btn btn-outline-secondary">
+                  <i class="fas fa-file me-2"></i>Summarize Another PDF
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer bg-transparent text-center text-muted">
+            <small>Upload a PDF file to generate an AI-powered summary</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Custom JavaScript -->
+  <script src="script.js"></script>
+</body>
+</html>

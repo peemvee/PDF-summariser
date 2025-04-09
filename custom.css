@@ -1,0 +1,51 @@
+/* Custom styles to enhance the Bootstrap theme */
+
+/* Summary box styling */
+.summary-box {
+    max-height: 400px;
+    overflow-y: auto;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: var(--bs-border-color);
+}
+
+/* Add some transitions for smoother UI */
+.btn, .form-control {
+    transition: all 0.3s ease;
+}
+
+/* Make the file input more visible in dark mode */
+input[type="file"] {
+    cursor: pointer;
+}
+
+/* Custom styling for the wait time counter */
+#waitTime {
+    font-weight: bold;
+}
+
+/* Ensure proper padding for content */
+#summaryContent {
+    white-space: pre-line;
+    line-height: 1.6;
+}
+
+/* Add hover effect for buttons */
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Make the card a bit more prominent */
+.card {
+    border-radius: 0.5rem;
+    border: 1px solid var(--bs-border-color);
+    overflow: hidden;
+}
+
+.card-header {
+    border-bottom: 1px solid var(--bs-border-color);
+}
+
+.card-footer {
+    border-top: 1px solid var(--bs-border-color);
+}
